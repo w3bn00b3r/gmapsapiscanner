@@ -1,23 +1,17 @@
 [tool.poetry]
-name = "gapiscanner"
-version = "2.0.0"
-description = "Google API Scanner - Tests Google API keys (Gemini, Cloud AI, Maps) for unauthorized access and data exposure"
+name = "gmapsapiscanner"
+version = "1.0.0"
+description = "Google Maps API Scanner - Tests Google Maps API keys for vulnerabilities"
 authors = ["Ozgur Alp <info@ozguralp.com>"]
-license = "MIT"
-repository = "https://github.com/ozguralp/gapiscanner"
 readme = "README.md"
-include = [
-    {path = "google_api_scanner.py", format = "sdist"},
-    {path = "RELEASE_NOTES.md", format = "sdist"},
-]
 
-packages = [
-    {include = "gapiscanner_core"},
-]
+packages = [{include = "maps_api_scanner.py"}]
 
 [tool.poetry.dependencies]
-python = ">=3.9,<4.0"
+python = ">=3.10,<4.0"
 requests = ">=2.32.5"
+colorama = ">=0.4.6,<0.5"
+urllib3 = ">=2.7.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.0.0"
@@ -25,7 +19,7 @@ pytest-cov = ">=4.1.0"
 pytest-mock = ">=3.12.0"
 
 [tool.poetry.scripts]
-gapiscanner = "gapiscanner_core.engine:main"
+gmapsapiscanner = "maps_api_scanner:main"
 
 [build-system]
 requires = ["poetry-core"]
@@ -41,6 +35,11 @@ addopts = """
     -v
     --strict-markers
     --tb=short
+    --cov=tests
+    --cov-report=html
+    --cov-report=xml
+    --cov-report=term-missing:skip-covered
+    --cov-fail-under=80
 """
 markers = [
     "unit: Unit tests",
@@ -54,7 +53,7 @@ filterwarnings = [
 ]
 
 [tool.coverage.run]
-source = ["google_api_scanner", "gapiscanner_core"]
+source = ["tests"]
 omit = [
     "*/__pycache__/*",
     "*/venv/*",
@@ -83,7 +82,7 @@ exclude_lines = [
 precision = 2
 show_missing = true
 skip_covered = false
-fail_under = 65
+fail_under = 80
 
 [tool.coverage.html]
 directory = "htmlcov"
